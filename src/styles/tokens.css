@@ -1,0 +1,64 @@
+/*
+ * Design tokens. Single source of truth for color, type, radius,
+ * breakpoints and motion. Tailwind v4 turns the @theme values into utilities
+ * (bg-bg, text-ink, font-display, rounded-md, text-display, ...).
+ */
+@theme {
+  /* Color */
+  --color-bg: #07060b;
+  --color-surface: #0e0c16;
+  --color-ink: #f3efe8;
+  --color-ink-muted: #a7a2b3;
+  --color-violet: #7c5cff;
+  --color-violet-strong: #6843f2; /* filled buttons: white text passes 4.5:1 */
+  --color-violet-soft: #a692ff; /* accent text on dark */
+  --color-blue: #3d7bff;
+  --color-line: rgb(243 239 232 / 0.12);
+  --color-glow: rgb(124 92 255 / 0.35);
+
+  /* Typography */
+  --font-display: 'Bricolage Grotesque Variable', 'Arial Narrow', Arial, sans-serif;
+  --font-sans: 'Hanken Grotesk Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --text-display: clamp(2.75rem, 1.4rem + 5.6vw, 5.75rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.03em;
+  --text-h2: clamp(2rem, 1.2rem + 3vw, 3.75rem);
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.025em;
+  --text-lead: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+  --text-lead--line-height: 1.45;
+
+  /* Radius: a small scale, not one value for everything */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
+
+  /* Breakpoints: 480 / 768 / 1024 / 1440 / 1920 */
+  --breakpoint-*: initial;
+  --breakpoint-xs: 30rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 90rem;
+  --breakpoint-2xl: 120rem;
+
+  /* Effects */
+  --shadow-glow: 0 0 40px -8px var(--color-glow);
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  /* Layout */
+  --container-max: 80rem;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --section-y: clamp(5rem, 12vw, 9rem);
+  --header-h: 5rem;
+
+  /* Motion durations (mirrored in src/lib/motion.ts for GSAP) */
+  --duration-fast: 0.18s;
+  --duration-base: 0.35s;
+  --duration-slow: 0.8s;
+}

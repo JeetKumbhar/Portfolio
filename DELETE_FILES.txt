@@ -1,0 +1,13 @@
+DELETE_FILES.txt
+
+This is a FULL-PROJECT ZIP for your new, empty repository, so there is nothing to delete.
+
+Only if you previously extracted an EARLIER TypeScript delivery into the same local folder, delete
+these leftovers so no TypeScript remains:
+
+  tsconfig.json, tsconfig.app.json, tsconfig.node.json, vite.config.ts
+  every *.ts and *.tsx file under src/ (the JavaScript versions are .js / .jsx)
+  the folder src/types/
+  node_modules/ and package-lock.json, then run: npm install
+
+No renames.

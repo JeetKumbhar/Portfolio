@@ -1,0 +1,179 @@
+@layer base {
+  html {
+    background: var(--color-bg);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--header-h);
+  }
+
+  /* Smooth anchor scrolling only when the visitor allows motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    margin: 0;
+    min-width: 20rem;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip; /* guard against stray horizontal overflow */
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-stretch: 90%;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ::selection {
+    background: var(--color-violet-strong);
+    color: #fff;
+  }
+
+  /* Visible keyboard focus everywhere; never removed. */
+  :focus-visible {
+    outline: 2px solid var(--color-violet-soft);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Programmatic focus targets (sections) don't need a ring. */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
+  /* Honour reduced motion globally; scroll-driven motion is gated again in JS. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* ---------- Cinematic scene layers (static art, Phase 1) ---------- */
+
+  /* Soft horizon light under the planet; ridges silhouette against it. */
+  .horizon-glow {
+    position: absolute;
+    left: var(--planet-x, 50%);
+    bottom: 9svh;
+    width: min(100vw, 72rem);
+    height: 38svh;
+    translate: -50% 0;
+    background:
+      radial-gradient(ellipse 50% 50% at 50% 58%, rgb(124 92 255 / 0.5), transparent 72%),
+      radial-gradient(ellipse 26% 20% at 50% 62%, rgb(110 140 255 / 0.45), transparent 72%);
+    filter: blur(8px);
+    opacity: 0.45;
+  }
+
+  @media (min-width: 64rem) {
+    .horizon-glow {
+      opacity: 1;
+    }
+  }
+
+  /* Static film grain. Generated noise, no image request. */
+  .grain {
+    position: absolute;
+    inset: 0;
+    /* Plain alpha blending (no blend-mode) so a live WebGL canvas underneath stays cheap to composite. */
+    opacity: 0.05;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Edge darkening keeps the focus on the planet and protects text contrast. */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 85% 75% at var(--planet-x, 50%) 40%, transparent 35%, rgb(7 6 11 / 0.8) 100%),
+      linear-gradient(to bottom, rgb(7 6 11 / 0.7), transparent 22%);
+  }
+
+  /* Left scrim so the title never competes with the ring tail. */
+  .text-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to right, rgb(7 6 11 / 0.82) 0%, rgb(7 6 11 / 0.35) 38%, transparent 60%);
+  }
+
+  /* One orchestrated load-in. Disabled by the global reduced-motion rule. */
+  .load-fade {
+    animation: load-fade 1.8s var(--ease-out-expo) both;
+  }
+  .load-rise {
+    animation: load-rise 1s var(--ease-out-expo) both;
+    animation-delay: var(--d, 0s);
+  }
+
+  @keyframes load-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes load-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+
+  /* Faint colored ambience behind a section; needs `relative isolate` on the section. */
+  .ambient-r::before,
+  .ambient-l::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 10%;
+    width: min(60rem, 90vw);
+    height: 30rem;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgb(124 92 255 / 0.13), transparent);
+  }
+  .ambient-r::before {
+    right: -20%;
+  }
+  .ambient-l::before {
+    left: -25%;
+  }
+
+  .placeholder-note {
+    border: 1px dashed rgb(166 146 255 / 0.5);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    color: var(--color-ink-muted);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+}
