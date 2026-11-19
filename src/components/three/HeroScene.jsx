@@ -33,8 +33,6 @@ const MOONS = [
 function Scene({ tier, onReady }) {
   const config = TIERS[tier]
   const rig = useRef(null)
-  const planet = useRef(null)
-  const rings = useRef(null)
   const moons = useRef(null)
   const pointer = useRef({ x: 0, y: 0 })
   const frames = useRef(0)
@@ -71,10 +69,8 @@ function Scene({ tier, onReady }) {
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime
     const progress = heroProgress.value
-    const ease = Math.min(1, delta * 3)
-
-    if (planet.current) planet.current.rotation.y += delta * 0.05
-    if (rings.current) rings.current.rotation.z = RING_ROLL + Math.sin(t * 0.3) * 0.012
+    // After a long pause (hero off-screen) delta can be large; cap it so nothing jumps.
+    const ease = Math.min(1, Math.min(delta, 0.1) * 3)
 
     moons.current?.children.forEach((moon, i) => {
       const m = MOONS[i]
@@ -101,7 +97,8 @@ function Scene({ tier, onReady }) {
     // Adaptive quality: if early frames are slow, drop to 1x pixel ratio once.
     frames.current += 1
     if (frames.current > 30 && frames.current <= 150) {
-      if (delta > 0.03) slowFrames.current += 1
+      // Idle frames are about 33 ms apart on purpose, so only count frames well beyond that as slow.
+      if (delta > 0.055) slowFrames.current += 1
       if (frames.current === 150 && slowFrames.current > 60) setDpr(1)
     }
 
@@ -118,7 +115,7 @@ function Scene({ tier, onReady }) {
       <directionalLight position={[4, -1, -2]} intensity={0.9} color="#4d7bff" />
 
       <group ref={rig}>
-        <mesh ref={planet}>
+        <mesh>
           <sphereGeometry args={[1, config.segments, config.segments]} />
           <meshPhysicalMaterial
             color="#150d3f"
@@ -144,7 +141,7 @@ function Scene({ tier, onReady }) {
         </mesh>
 
         {/* Rings sit in a tilted, rolled frame; depth testing gives the front/back occlusion. */}
-        <group ref={rings} rotation={ringEuler}>
+        <group rotation={ringEuler}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             {RINGS.map((ring) => (
               <mesh key={ring.radius}>
@@ -187,12 +184,58 @@ function Scene({ tier, onReady }) {
   )
 }
 
+/** While idle the scene only drifts slowly, so about 30 frames a second is plenty. */
+const IDLE_FRAME_MS = 33
+
+/**
+ * Decides when to draw a frame (the Canvas is in "demand" mode):
+ *  - idle: about 30 frames a second, which is enough for the slow moons and dust
+ *  - while the visitor scrolls or moves the mouse: every frame, so the camera move stays smooth
+ *  - hero off-screen (active = false): no frames at all
+ */
+function FrameDriver({ active, followPointer }) {
+  const invalidate = useThree((state) => state.invalidate)
+
+  useEffect(() => {
+    if (!active) return
+    let raf = 0
+    let lastDraw = 0
+    let busyUntil = 0
+
+    const markBusy = (ms) => {
+      busyUntil = performance.now() + ms
+    }
+    const onScroll = () => markBusy(200)
+    const onPointerMove = () => markBusy(700) // longer, so the parallax can settle smoothly
+
+    const tick = (now) => {
+      raf = requestAnimationFrame(tick)
+      if (now < busyUntil || now - lastDraw >= IDLE_FRAME_MS) {
+        lastDraw = now
+        invalidate()
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    if (followPointer) window.addEventListener('pointermove', onPointerMove, { passive: true })
+    raf = requestAnimationFrame(tick)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('pointermove', onPointerMove)
+    }
+  }, [active, followPointer, invalidate])
+
+  return null
+}
+
 export default function HeroScene({ tier, active, onReady, onContextLost }) {
   const config = TIERS[tier]
 
   return (
     <Canvas
-      frameloop={active ? 'always' : 'never'}
+      frameloop="demand"
       dpr={config.dpr}
       camera={{ position: [0, 0, CAMERA_Z], fov: 35, near: 0.1, far: 40 }}
       gl={{ antialias: config.antialias, alpha: true, powerPreference: 'high-performance' }}
@@ -204,6 +247,7 @@ export default function HeroScene({ tier, active, onReady, onContextLost }) {
         })
       }}
     >
+      <FrameDriver active={active} followPointer={config.pointer} />
       <Scene tier={tier} onReady={onReady} />
     </Canvas>
   )

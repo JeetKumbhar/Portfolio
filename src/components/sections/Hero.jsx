@@ -100,21 +100,21 @@ export function Hero() {
           <div ref={textRef}>
             <h1
               id="hero-title"
-              className="load-rise text-display font-[650] uppercase [--d:0.25s] [font-stretch:86%]"
+              className="load-rise text-display font-[650] uppercase [--d:0.15s] [font-stretch:86%]"
             >
               <span className="block">Jeet</span> <span className="block">Kumbhar</span>
             </h1>
 
-            <div className="load-rise mt-6 flex items-center gap-4 [--d:0.45s]">
+            <div className="load-rise mt-6 flex items-center gap-4 [--d:0.3s]">
               <span aria-hidden="true" className="h-px w-12 bg-linear-to-r from-violet-soft to-transparent" />
               <p className="font-display text-xl font-medium text-violet-soft">{profile.role}</p>
             </div>
 
-            <p className="load-rise mt-4 max-w-[36ch] text-lead text-ink-muted [--d:0.6s]">
+            <p className="load-rise mt-4 max-w-[36ch] text-lead text-ink-muted [--d:0.42s]">
               {profile.tagline}
             </p>
 
-            <div className="load-rise mt-9 flex flex-wrap gap-3 [--d:0.8s]">
+            <div className="load-rise mt-9 flex flex-wrap gap-3 [--d:0.55s]">
               <ButtonLink href="#projects" icon="arrow">
                 Explore My Work
               </ButtonLink>
@@ -135,7 +135,7 @@ export function Hero() {
           ref={cueRef}
           href="#about"
           aria-label="Scroll to About"
-          className="load-rise absolute bottom-6 right-(--gutter) hidden min-h-12 flex-col items-center gap-3 px-3 text-sm text-ink-muted transition-colors duration-(--duration-base) hover:text-ink md:flex [--d:1.2s]"
+          className="load-rise absolute bottom-6 right-(--gutter) hidden min-h-12 flex-col items-center gap-3 px-3 text-sm text-ink-muted transition-colors duration-(--duration-base) hover:text-ink md:flex [--d:0.9s]"
         >
           Scroll
           <span aria-hidden="true" className="h-10 w-px bg-linear-to-b from-ink-muted to-transparent" />

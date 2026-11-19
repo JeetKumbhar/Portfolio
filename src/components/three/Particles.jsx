@@ -22,7 +22,7 @@ export function Particles({ count }) {
   }, [count])
 
   useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.012
+    if (ref.current) ref.current.rotation.y += Math.min(delta, 0.1) * 0.012
   })
 
   return (

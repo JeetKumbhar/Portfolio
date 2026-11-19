@@ -1,7 +1,7 @@
 const base =
   'group relative inline-flex min-h-12 items-center justify-center gap-2.5 rounded-pill px-6 ' +
   'text-[0.9375rem] font-semibold tracking-[0.01em] ' +
-  'transition-[background-color,border-color,box-shadow,filter,color] duration-(--duration-base) ease-out-expo'
+  'transition-[background-color,border-color,box-shadow,filter,color,transform] duration-(--duration-base) ease-out-expo'
 
 const variants = {
   // Start color keeps white text above 4.5:1 across the whole gradient.

@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+import { useReveal } from '@/hooks/useReveal'
 import { Section } from '@/components/layout/Section'
 import { SectionHeading } from '@/components/layout/SectionHeading'
 import { ProjectPreview } from './ProjectPreview'
@@ -10,13 +12,16 @@ const pad = (n) => String(n).padStart(2, '0')
  * Used on phones and tablets, and for visitors who prefer reduced motion.
  */
 export function ProjectList({ projects }) {
+  const sectionRef = useRef(null)
+  useReveal(sectionRef)
+
   return (
-    <Section id="projects" className="ambient-l relative isolate overflow-hidden">
+    <Section ref={sectionRef} id="projects" className="ambient-l relative isolate overflow-hidden">
       <SectionHeading sectionId="projects">Projects</SectionHeading>
 
       <ol className="mt-14 flex flex-col gap-20 md:gap-28">
         {projects.map((project, index) => (
-          <li key={project.id} className="grid items-center gap-8 md:grid-cols-[1.2fr_1fr] md:gap-12">
+          <li key={project.id} data-reveal className="grid items-center gap-8 md:grid-cols-[1.2fr_1fr] md:gap-12">
             <div className="flex flex-col gap-4">
               <p className="font-display text-lg text-violet-soft tabular-nums">
                 {pad(index + 1)} <span className="text-ink-muted">/ {pad(projects.length)}</span>

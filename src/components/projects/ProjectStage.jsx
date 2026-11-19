@@ -28,6 +28,7 @@ export function ProjectStage({ projects }) {
   const count = projects.length
   const sectionRef = useRef(null)
   const meterRef = useRef(null)
+  const counterRef = useRef(null)
   const panelRefs = useRef([])
   const triggerRef = useRef(null)
   const activeRef = useRef(0)
@@ -76,6 +77,12 @@ export function ProjectStage({ projects }) {
           gsap.to(panel, { autoAlpha: 0, y: -20 * direction, duration: 0.25, ease: 'power2.in', overwrite: true })
         }
       })
+      // The counter number slides in from the direction you are scrolling.
+      gsap.fromTo(
+        counterRef.current,
+        { autoAlpha: 0, y: 12 * direction },
+        { autoAlpha: 1, y: 0, duration: 0.45, ease: 'expo.out', overwrite: true },
+      )
       previousRef.current = active
     },
     { scope: sectionRef, dependencies: [active] },
@@ -104,11 +111,14 @@ export function ProjectStage({ projects }) {
         <Container className="grid h-full items-center gap-12 pb-10 pt-[calc(var(--header-h)+1rem)] lg:grid-cols-[17rem_1fr] lg:gap-14">
           {/* Left: heading, counter, progress and direct navigation */}
           <div className="flex flex-col gap-7 [@media(max-height:700px)]:gap-4">
-            <SectionHeading sectionId="projects">Projects</SectionHeading>
+            <SectionHeading sectionId="projects" reveal={false}>
+              Projects
+            </SectionHeading>
 
             {/* Counter and previous / next buttons share one row to save height on short screens. */}
             <div className="flex items-center justify-between">
               <p
+                ref={counterRef}
                 aria-hidden="true"
                 className="font-display text-5xl font-semibold tabular-nums [@media(max-height:700px)]:text-4xl"
               >

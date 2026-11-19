@@ -1,4 +1,6 @@
+import { useRef } from 'react'
 import { skillGroups } from '@/data/skills'
+import { useReveal } from '@/hooks/useReveal'
 import { Section } from '@/components/layout/Section'
 import { SectionHeading } from '@/components/layout/SectionHeading'
 
@@ -7,12 +9,15 @@ import { SectionHeading } from '@/components/layout/SectionHeading'
  * There are deliberately no percentages or progress bars: they would be made-up numbers.
  */
 export function Skills() {
-  return (
-    <Section id="skills">
-      <SectionHeading sectionId="skills">Skills</SectionHeading>
-      <p className="mt-6 max-w-[48ch] text-lead text-ink-muted">Technologies I work with, grouped by what they do.</p>
+  const sectionRef = useRef(null)
+  useReveal(sectionRef)
 
-      <dl className="mt-14 border-t border-line">
+  return (
+    <Section ref={sectionRef} id="skills">
+      <SectionHeading sectionId="skills">Skills</SectionHeading>
+      <p data-reveal data-reveal-delay="0.05" className="mt-6 max-w-[48ch] text-lead text-ink-muted">Technologies I work with, grouped by what they do.</p>
+
+      <dl data-reveal-group className="mt-14 border-t border-line">
         {skillGroups.map((group) => (
           <div
             key={group.label}
