@@ -9,6 +9,7 @@
   --color-surface: #0e0c16;
   --color-ink: #f3efe8;
   --color-ink-muted: #a7a2b3;
+  --color-ink-soft: #c3bfce; /* secondary text that sits over the lit horizon glow */
   --color-violet: #7c5cff;
   --color-violet-strong: #6843f2; /* filled buttons: white text passes 4.5:1 */
   --color-violet-soft: #a692ff; /* accent text on dark */

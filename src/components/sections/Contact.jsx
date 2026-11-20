@@ -56,7 +56,7 @@ export function Contact() {
   return (
     <Section ref={sectionRef} id="contact" className="relative isolate overflow-hidden">
       {/* Closing frame: the same ridgeline and light as the hero, bookending the page. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 [--planet-x:50%]">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 [--planet-x:50%] forced-colors:hidden">
         <div className="horizon-glow" />
         <Horizon className="absolute inset-x-0 bottom-0 h-[34%] min-h-40 w-full" />
       </div>

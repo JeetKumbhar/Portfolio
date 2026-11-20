@@ -45,6 +45,8 @@ export function About() {
               <dt className="text-sm text-ink-muted">Education</dt>
               <dd className="mt-1">
                 <span className="block font-display text-2xl font-semibold">{education.degree}</span>
+                {/* Stacked blocks have no punctuation between them; this gives screen readers a pause. */}
+                <span className="sr-only">, </span>
                 <span className="mt-1 block text-ink-muted">
                   {education.institution}, {education.date}
                 </span>

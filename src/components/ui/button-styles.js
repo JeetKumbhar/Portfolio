@@ -6,7 +6,7 @@ const base =
 const variants = {
   // Start color keeps white text above 4.5:1 across the whole gradient.
   primary:
-    'bg-[linear-gradient(135deg,#6e4ff6_0%,#5645ee_55%,#4a44e6_100%)] text-white ' +
+    'border border-transparent bg-[linear-gradient(135deg,#6e4ff6_0%,#5645ee_55%,#4a44e6_100%)] text-white ' +
     'shadow-[0_10px_30px_-10px_rgb(124_92_255/0.75),inset_0_1px_0_rgb(255_255_255/0.22)] ' +
     'hover:brightness-110 hover:shadow-[0_14px_36px_-10px_rgb(124_92_255/0.9),inset_0_1px_0_rgb(255_255_255/0.28)]',
   ghost:

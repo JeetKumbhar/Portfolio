@@ -22,6 +22,7 @@ export function Hero() {
   const sectionRef = useRef(null)
   const textRef = useRef(null)
   const cueRef = useRef(null)
+  const actionsRef = useRef(null)
   const starsRef = useRef(null)
   const horizonRef = useRef(null)
   const planetRef = useRef(null)
@@ -48,8 +49,12 @@ export function Hero() {
 
         // Text drifts up with the scroll and hands off just before the stage releases.
         tl.to(textRef.current, { yPercent: -7, duration: 1 }, 0)
+          // The text block fades with plain opacity so the heading stays in the accessibility tree.
+          // The buttons fade slightly earlier and also get visibility:hidden, so they are already
+          // unfocusable before they stop being visible. Nobody can focus a button they cannot see.
           .to(textRef.current, { opacity: 0, duration: 0.22 }, 0.74)
-          .to(cueRef.current, { opacity: 0, duration: 0.15 }, 0)
+          .to(actionsRef.current, { autoAlpha: 0, duration: 0.2 }, 0.62)
+          .to(cueRef.current, { autoAlpha: 0, duration: 0.15 }, 0)
           .to(horizonRef.current, { yPercent: 14, duration: 1 }, 0)
           .to(starsRef.current, { scale: 1.12, yPercent: -4, duration: 1 }, 0)
 
@@ -78,7 +83,7 @@ export function Hero() {
     >
       <div className="relative isolate flex min-h-svh flex-col overflow-clip [--planet-x:50%] md:[--planet-x:60%] motion-safe:lg:sticky motion-safe:lg:top-0 motion-safe:lg:h-svh lg:[--planet-x:71%]">
         {/* Decorative scene */}
-        <div aria-hidden="true" className="load-fade pointer-events-none absolute inset-0 -z-10">
+        <div aria-hidden="true" className="load-fade pointer-events-none absolute inset-0 -z-10 forced-colors:hidden">
           <div ref={starsRef} className="absolute inset-0">
             <Stars className="size-full" />
           </div>
@@ -110,11 +115,11 @@ export function Hero() {
               <p className="font-display text-xl font-medium text-violet-soft">{profile.role}</p>
             </div>
 
-            <p className="load-rise mt-4 max-w-[36ch] text-lead text-ink-muted [--d:0.42s]">
+            <p className="load-rise mt-4 max-w-[36ch] text-lead text-ink-soft [--d:0.42s]">
               {profile.tagline}
             </p>
 
-            <div className="load-rise mt-9 flex flex-wrap gap-3 [--d:0.55s]">
+            <div ref={actionsRef} className="load-rise mt-9 flex flex-wrap gap-3 [--d:0.55s]">
               <ButtonLink href="#projects" icon="arrow">
                 Explore My Work
               </ButtonLink>

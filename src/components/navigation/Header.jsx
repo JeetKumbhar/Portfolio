@@ -64,7 +64,7 @@ export function Header() {
       <Container className="grid h-(--header-h) grid-cols-[auto_1fr] items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
         <a
           href={`#${HERO_ID}`}
-          aria-label="Jeet Kumbhar, back to top"
+          aria-label="JK, back to top"
           onClick={() => setOpen(false)}
           className={`${glass} pointer-events-auto grid size-12 place-items-center rounded-full font-display text-lg font-semibold tracking-tight transition-colors duration-(--duration-base) hover:border-violet-soft/70`}
         >
@@ -81,7 +81,7 @@ export function Header() {
                     href={`#${item.id}`}
                     aria-current={isActive ? 'location' : undefined}
                     className={`inline-flex min-h-11 items-center rounded-pill px-5 text-[0.9375rem] font-medium transition-colors duration-(--duration-base) hover:text-ink ${
-                      isActive ? 'bg-white/10 text-ink' : 'text-ink-muted'
+                      isActive ? 'bg-white/10 text-ink forced-colors:underline' : 'text-ink-muted'
                     }`}
                   >
                     {item.label}
@@ -123,7 +123,10 @@ export function Header() {
         className="pointer-events-auto md:hidden"
       >
         <Container>
-          <ul className={`${glass} rounded-[1.25rem] bg-bg/90 p-2 shadow-[0_24px_60px_-20px_rgb(0_0_0/0.8)]`}>
+          {/* max-h + overflow lets the menu scroll on short screens, so every link stays reachable */}
+          <ul
+            className={`${glass} max-h-[calc(100svh-var(--header-h)-1rem)] overflow-y-auto overscroll-contain rounded-[1.25rem] bg-bg/90 p-2 shadow-[0_24px_60px_-20px_rgb(0_0_0/0.8)]`}
+          >
             {navItems.map((item) => {
               const isActive = activeId === item.id
               return (
@@ -133,7 +136,7 @@ export function Header() {
                     aria-current={isActive ? 'location' : undefined}
                     onClick={() => setOpen(false)}
                     className={`flex min-h-14 items-center justify-between rounded-md px-4 font-display text-2xl font-medium ${
-                      isActive ? 'bg-white/8 text-ink' : 'text-ink-muted'
+                      isActive ? 'bg-white/8 text-ink forced-colors:underline' : 'text-ink-muted'
                     }`}
                   >
                     {item.label}

@@ -104,7 +104,7 @@ export function ProjectStage({ projects }) {
       aria-labelledby="projects-title"
       tabIndex={-1}
       // Cancels the header offset so the anchor jump lands exactly where the stage sticks.
-      className="relative scroll-mt-[calc(var(--header-h)*-1)]"
+      className="relative -scroll-mt-(--header-h)"
       style={{ height: `calc(100svh + ${(count - 1) * SCROLL_PER_PROJECT}svh)` }}
     >
       <div className="ambient-l sticky top-0 isolate h-svh overflow-clip">
@@ -146,7 +146,7 @@ export function ProjectStage({ projects }) {
 
             <div ref={meterRef} className="relative pl-5">
               <span aria-hidden="true" className="absolute inset-y-0 left-0 w-px bg-line">
-                <span className="absolute inset-0 origin-top bg-violet-soft [transform:scaleY(var(--p,0))]" />
+                <span className="absolute inset-0 origin-top bg-violet-soft transform-[scaleY(var(--p,0))]" />
               </span>
               <ol aria-label="Jump to a project" className="flex flex-col">
                 {projects.map((project, index) => (

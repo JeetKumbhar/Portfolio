@@ -20,6 +20,8 @@ function refreshWhenFontsReady() {
  *  - Phones get a shorter, faster version than tablets and desktops.
  *  - Each thing animates once and then its animation styles are removed, so layout never shifts.
  *  - It never touches scrolling, so navigation links and anchors always work immediately.
+ *  - Hidden content is only made transparent, never `visibility: hidden`, so keyboard users can still Tab
+ *    to links that have not been revealed yet; focusing one finishes its reveal at once.
  */
 export function useReveal(scopeRef) {
   useGSAP(
@@ -37,7 +39,7 @@ export function useReveal(scopeRef) {
         scope.querySelectorAll('[data-reveal]').forEach((el) => {
           gsap.from(el, {
             ...shared,
-            autoAlpha: 0,
+            opacity: 0,
             y: distance,
             duration,
             delay: Number(el.dataset.revealDelay || 0),
@@ -48,13 +50,20 @@ export function useReveal(scopeRef) {
         scope.querySelectorAll('[data-reveal-group]').forEach((group) => {
           gsap.from(group.children, {
             ...shared,
-            autoAlpha: 0,
+            opacity: 0,
             y: distance,
             duration,
             stagger: large ? 0.09 : 0.05,
             scrollTrigger: once(group, 'top 85%'),
           })
         })
+
+        // If keyboard focus reaches something mid-reveal, finish its animation straight away.
+        const finishOnFocus = (event) => {
+          const target = event.target.closest('[data-reveal], [data-reveal-group] > *')
+          if (target) gsap.getTweensOf(target).forEach((tween) => tween.progress(1))
+        }
+        scope.addEventListener('focusin', finishOnFocus)
 
         scope.querySelectorAll('[data-line]').forEach((el) => {
           gsap.from(el, {
@@ -66,6 +75,8 @@ export function useReveal(scopeRef) {
             scrollTrigger: once(el, 'top 90%'),
           })
         })
+
+        return () => scope.removeEventListener('focusin', finishOnFocus)
       }
 
       mm.add('(prefers-reduced-motion: no-preference) and (min-width: 48rem)', setup(true))
